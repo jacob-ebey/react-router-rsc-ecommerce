@@ -1,0 +1,46 @@
+.crossfade-container-trigger {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.crossfade-container-trigger:hover + .crossfade-container picture:first-child,
+.crossfade-container-trigger:active + .crossfade-container picture:first-child,
+.crossfade-container-trigger:focus-visible
+  + .crossfade-container
+  picture:first-child {
+  opacity: 0;
+}
+
+.crossfade-container-trigger:hover + .crossfade-container picture:last-child,
+.crossfade-container-trigger:active + .crossfade-container picture:last-child,
+.crossfade-container-trigger:focus-visible
+  + .crossfade-container
+  picture:last-child {
+  opacity: 1;
+}
+
+.crossfade-container {
+  position: relative;
+
+  & picture {
+    display: block;
+  }
+
+  & picture:last-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    opacity: 0;
+  }
+
+  & picture:first-child {
+    opacity: 1;
+  }
+}

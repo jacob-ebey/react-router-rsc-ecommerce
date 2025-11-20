@@ -1,0 +1,22 @@
+{
+  "extends": "@tsconfig/vite-react/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "react/canary",
+      "react-dom/canary",
+      "vite/client",
+      "@vitejs/plugin-rsc/types"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "plugins": [
+      {
+        "name": "gql.tada/ts-plugin",
+        "schema": "https://mock.shop/api",
+        "tadaOutputLocation": "./shopify.d.ts"
+      }
+    ]
+  }
+}
