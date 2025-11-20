@@ -12,9 +12,9 @@ importers:
 
   .:
     dependencies:
-      '@remix-run/events':
-        specifier: 0.0.0-experimental-remix-jam.1
-        version: 0.0.0-experimental-remix-jam.1
+      '@remix-run/interaction':
+        specifier: 0.3.0
+        version: 0.3.0
       '@remix-run/node-fetch-server':
         specifier: 0.12.0
         version: 0.12.0
@@ -1103,8 +1103,8 @@ packages:
     peerDependencies:
       react: 19.3.0-canary-408b38ef-20251023
 
-  '@remix-run/events@0.0.0-experimental-remix-jam.1':
-    resolution: {integrity: sha512-4Xs0Ek3QYsx2Tq64ZkSMXN9gAwBOg42vzK/5aTkACktb6asljm/wf8mgFPtf+IUegh4BBzkapNXAdmXEh4UqNg==}
+  '@remix-run/interaction@0.3.0':
+    resolution: {integrity: sha512-lJ/wOkXJOa6913j7x9LSfx7q+5b3FQCd+uzh36G3oUjL0/4AcI1Ch3LiJmHTNmrlHgKHlb3D9idHjpOrpbljyA==}
 
   '@remix-run/node-fetch-server@0.10.0':
     resolution: {integrity: sha512-FmYaJHQKEPrT0UFo5KaLTmrm4F6dz5DJBzRY42H93w8FpVg5zKifNWGbH+wYsyExyWVgVrOsifS7IGFtz7HkSA==}
@@ -4308,7 +4308,7 @@ snapshots:
       '@react-types/shared': 3.32.1(react@19.3.0-canary-408b38ef-20251023)
       react: 19.3.0-canary-408b38ef-20251023
 
-  '@remix-run/events@0.0.0-experimental-remix-jam.1': {}
+  '@remix-run/interaction@0.3.0': {}
 
   '@remix-run/node-fetch-server@0.10.0': {}
 

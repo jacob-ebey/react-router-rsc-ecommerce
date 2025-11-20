@@ -1,6 +1,6 @@
 "use client";
 
-import { events } from "@remix-run/events";
+import { on } from "@remix-run/interaction";
 import { startTransition, useCallback, useEffect, useState } from "react";
 import {
   isRouteErrorResponse,
@@ -17,10 +17,10 @@ import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/ui/sidebar";
 import { decodeError, StatusCodeError } from "@/lib/errors";
 
-import { createSetOpen, onSetOpen } from "./events";
+import { cartSetOpenEvent, CartSetOpenEvent } from "./events";
 
 export function setCartOpen() {
-  dispatchEvent(createSetOpen({ detail: true }));
+  dispatchEvent(new CartSetOpenEvent(true));
 }
 
 export function Shell({
@@ -42,12 +42,12 @@ export function Shell({
 
   useEffect(
     () =>
-      events(window, [
-        onSetOpen((event) => {
-          setCartOpen(!!event.detail);
-        }),
-      ]),
-    []
+      on(window, {
+        [cartSetOpenEvent](event) {
+          setCartOpen(event.open);
+        },
+      }),
+    [],
   );
 
   return (
@@ -63,17 +63,13 @@ export function Shell({
       </head>
       <body className="p-4 relative">
         <div className="paper-overlay"></div>
+
         <MinimumLoadingTime
           isLoading={navigation.state !== "idle"}
           minimumLoadingTime={1000}
         >
           <div className="fixed left-0 bottom-0 right-0 bg-transparent z-40 pointer-events-none animate-[slideLeftToRight_3s_linear_infinite]">
             <div className="bg-transparent progress left-right">
-              <link
-                rel="preload"
-                as="image"
-                href="https://cdn.shopify.com/s/files/1/0655/4127/5819/files/load_runner.gif?v=1739987429&width=200&height=200&crop=center"
-              />
               <img
                 alt=""
                 className="grayscale-1 brightness-2000 invert w-20 h-20"

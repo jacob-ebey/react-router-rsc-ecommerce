@@ -1,5 +1,16 @@
-import { createEventType } from "@remix-run/events";
+export const cartSetOpenEvent = "cart:setOpen" as const;
 
-const [onSetOpen, createSetOpen] = createEventType<boolean>("cart:setOpen");
+export class CartSetOpenEvent extends Event {
+  open: boolean;
 
-export { onSetOpen, createSetOpen };
+  constructor(open: boolean) {
+    super(cartSetOpenEvent);
+    this.open = open;
+  }
+}
+
+declare global {
+  interface WindowEventMap {
+    [cartSetOpenEvent]: CartSetOpenEvent;
+  }
+}
