@@ -4,14 +4,46 @@ import { graphql } from "gql.tada";
 import { redirectDocument } from "react-router";
 
 import { getClient } from "@/lib/gql";
+import { getSession } from "@/lib/session";
 
 export type CartActionResult = { id: string; error?: string };
 
-export async function checkout(
-  cartId: string,
-  formData: FormData
-): Promise<CartActionResult> {
-  throw redirectDocument("https://example.com/");
+const CheckoutQuery = graphql(
+  `
+    query CheckoutQuery($cartId: ID!) {
+      cart(id: $cartId) {
+        id
+        checkoutUrl
+      }
+    }
+  `
+);
+
+export async function checkout(cartId: string): Promise<CartActionResult> {
+  const client = getClient();
+  const session = getSession();
+  const sessionCartId = session.get("cartId");
+
+  if (cartId !== sessionCartId) {
+    return { id: cartId, error: "Cart session mismatch." };
+  }
+
+  const result = await client.query(
+    CheckoutQuery,
+    { cartId },
+    { requestPolicy: "network-only" }
+  );
+  const cart = result.data?.cart;
+
+  if (!cart || !cart.checkoutUrl) {
+    return { id: cartId, error: "Failed to retrieve checkout URL." };
+  }
+
+  if (cart.id !== cartId) {
+    return { id: cartId, error: "Cart ID mismatch." };
+  }
+
+  throw redirectDocument(cart.checkoutUrl as string);
   return { id: cartId };
 }
 
@@ -32,6 +64,12 @@ export async function removeFromCart(
   lineId: string
 ): Promise<CartActionResult> {
   const client = getClient();
+  const session = getSession();
+  const sessionCartId = session.get("cartId");
+
+  if (cartId !== sessionCartId) {
+    return { id: cartId, error: "Cart session mismatch." };
+  }
 
   try {
     const result = await client.mutation(RemoveFromCart, {
@@ -73,6 +111,12 @@ export async function setLineQuantity(
   quantity: number
 ): Promise<CartActionResult> {
   const client = getClient();
+  const session = getSession();
+  const sessionCartId = session.get("cartId");
+
+  if (cartId !== sessionCartId) {
+    return { id: cartId, error: "Cart session mismatch." };
+  }
 
   try {
     const result = await client.mutation(SetLineQuantity, {

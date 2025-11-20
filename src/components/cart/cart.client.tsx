@@ -252,6 +252,8 @@ function CartLineItem({
   onQuantityChange: (quantity: number) => void;
   onRemoveFromCart: () => void;
 }) {
+  const hydrated = useHydrated();
+
   const variant = line.merchandise;
   const product = variant.product;
   const price = variant.price;
@@ -291,6 +293,7 @@ function CartLineItem({
               maxValue={10}
               value={line.quantity}
               onChange={onQuantityChange}
+              isDisabled={!hydrated}
             >
               <Label className="sr-only">Quantity</Label>
               <Group className="flex gap-1 w-full">
