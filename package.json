@@ -9,7 +9,7 @@
     "build": "vite build",
     "prerender": "cross-env NODE_ENV=production node --import dotenv/config prerender.ts",
     "dev": "cross-env NODE_ENV=development vite",
-    "start": "cross-env NODE_ENV=production node server.js",
+    "start": "cross-env NODE_ENV=production node server.ts",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "cross-env NODE_ENV=test storybook build"
