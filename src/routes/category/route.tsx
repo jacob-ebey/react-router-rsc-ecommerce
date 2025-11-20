@@ -12,9 +12,12 @@ import { cacheLife } from "@/lib/cache";
 import { getClient } from "@/lib/gql";
 import type { Register } from "react-router";
 
+type CategoryRouteProps = Register["pages"]["/"] &
+  Register["pages"]["/c/:collectionHandle"];
+
 export default async function CategoryRoute({
   params: { collectionHandle = "all" },
-}: Register["pages"]["/"] & Register["pages"]["/c/:collectionHandle"]) {
+}: CategoryRouteProps) {
   const { title, description, products } = await getCollection(
     collectionHandle
   );

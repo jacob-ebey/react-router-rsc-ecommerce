@@ -44,7 +44,6 @@ export async function checkout(cartId: string): Promise<CartActionResult> {
   }
 
   throw redirectDocument(cart.checkoutUrl as string);
-  return { id: cartId };
 }
 
 const RemoveFromCart = graphql(
