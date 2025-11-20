@@ -1,7 +1,6 @@
 import { graphql, readFragment } from "gql.tada";
 import { Suspense } from "react";
 import type { Register } from "react-router";
-import { cacheLife } from "vite-plugin-react-use-cache/runtime";
 
 import { AddToCartForm } from "@/components/add-to-cart-form/add-to-cart-form";
 import { addToCartAction } from "@/components/add-to-cart-form/add-to-cart-form.actions";
@@ -15,9 +14,10 @@ import {
   ProductCardPrice,
   ProductCardTitle,
 } from "@/components/product-card/product-card";
+import { cacheLife } from "@/lib/cache";
 import { NotFoundError } from "@/lib/errors";
 import { getClient } from "@/lib/gql";
-import { setCartOpen } from "../root/client";
+import { setCartOpen } from "@/routes/root/client";
 
 export default async function ProductRoute({
   params: { productHandle },
