@@ -16,8 +16,8 @@ import type { ProductOptionsFragment } from "./add-to-cart-form.fragment";
 function encodeSelectedOptions(options: Record<string, string>) {
   const toEncode = Object.fromEntries(
     Object.entries(options).sort(
-      ([keyA], [keyB]) => keyA.charCodeAt(0) - keyB.charCodeAt(0)
-    )
+      ([keyA], [keyB]) => keyA.charCodeAt(0) - keyB.charCodeAt(0),
+    ),
   );
   return JSON.stringify(toEncode);
 }
@@ -47,14 +47,16 @@ export function AddToCartForm({
   const hydrated = useHydrated();
 
   const [selectedOptions, setSelectedOptions] = useState(() =>
-    decodeSelectedOptions(new URLSearchParams(location.search).get("options"))
+    decodeSelectedOptions(new URLSearchParams(location.search).get("options")),
   );
 
   const [lastLocation, setLastLocation] = useState(location);
   if (location.search !== lastLocation.search) {
     setLastLocation(location);
     setSelectedOptions(
-      decodeSelectedOptions(new URLSearchParams(location.search).get("options"))
+      decodeSelectedOptions(
+        new URLSearchParams(location.search).get("options"),
+      ),
     );
   }
 
@@ -76,7 +78,7 @@ export function AddToCartForm({
   const getNewSelectedOptions = (
     selectedOptions: Record<string, string>,
     name: string,
-    value: string
+    value: string,
   ) => {
     const newOptions = {
       ...selectedOptions,
@@ -104,11 +106,7 @@ export function AddToCartForm({
   const handleOptionSelect = (name: string, value: string) => {
     startTransition(() => {
       setSelectedOptions((prev) => {
-        const newSelectedOptions = getNewSelectedOptions(
-          selectedOptions,
-          name,
-          value
-        );
+        const newSelectedOptions = getNewSelectedOptions(prev, name, value);
         history.replaceState(null, "", newSelectedOptions.location);
 
         return newSelectedOptions.options;
@@ -151,7 +149,7 @@ export function AddToCartForm({
                       getNewSelectedOptions(
                         selectedOptions,
                         option.name,
-                        optionValue.name
+                        optionValue.name,
                       ).location
                     }
                     onClick={(e) => {
@@ -213,7 +211,7 @@ export function AddToCartForm({
 
       <div className="space-y-2">
         <Button
-          className="block w-full"
+          className="block w-full flex items-center justify-center"
           type="submit"
           isDisabled={!selectedVariant?.availableForSale}
           isPending={pending}

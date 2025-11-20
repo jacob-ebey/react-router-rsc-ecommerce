@@ -20,7 +20,7 @@ export function EmptyCart() {
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center gap-4 py-12 px-4 text-center"
+        "flex flex-col items-center justify-center gap-4 py-12 px-4 text-center",
       )}
     >
       <div>
@@ -63,7 +63,7 @@ export function CartForm({
   const [isTransitioning, startTransition] = useTransition();
   const hydrated = useHydrated();
 
-  const [error, cartAction, isUpdatingCart] = useActionState<
+  const [_, cartAction, isUpdatingCart] = useActionState<
     CartActionResult,
     | { type: "removeFromCart"; lineId: string }
     | { type: "setLineQuantity"; lineId: string; quantity: number }
@@ -81,12 +81,12 @@ export function CartForm({
           resultPromise = setLineQuantityAction(
             cartState.id,
             action.lineId,
-            action.quantity
+            action.quantity,
           );
           break;
         }
         case "checkout": {
-          resultPromise = checkoutAction(cartState.id, action.formData);
+          resultPromise = checkoutAction(cartState.id);
           break;
         }
       }
@@ -95,7 +95,7 @@ export function CartForm({
 
       return result ?? cartState;
     },
-    { id: cart.id }
+    { id: cart.id },
   );
 
   const [optimisticCart, cartActionOptimistic] = useOptimistic<
@@ -110,7 +110,7 @@ export function CartForm({
           lines: {
             ...state.lines,
             nodes: state.lines.nodes.filter(
-              (line) => line.id !== action.lineId
+              (line) => line.id !== action.lineId,
             ),
           },
         };
@@ -122,7 +122,7 @@ export function CartForm({
             nodes: state.lines.nodes.map((line) =>
               line.id === action.lineId
                 ? { ...line, quantity: action.quantity }
-                : line
+                : line,
             ),
           },
         };
@@ -169,7 +169,7 @@ export function CartForm({
   const total = optimisticCart.cost.totalAmount;
   const totalItems = optimisticCart.lines.nodes.reduce(
     (sum, line) => sum + line.quantity,
-    0
+    0,
   );
 
   if (totalItems === 0) {
@@ -210,7 +210,7 @@ export function CartForm({
       <div
         className={cn(
           "bottom-0 bg-background paper px-6 py-4 border-t-2 space-y-4",
-          { sticky }
+          { sticky },
         )}
       >
         <div className="flex justify-between items-center">

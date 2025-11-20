@@ -20,7 +20,9 @@ import { decodeError, StatusCodeError } from "@/lib/errors";
 import { cartSetOpenEvent, CartSetOpenEvent } from "./events";
 
 export function setCartOpen() {
-  dispatchEvent(new CartSetOpenEvent(true));
+  startTransition(() => {
+    dispatchEvent(new CartSetOpenEvent(true));
+  });
 }
 
 export function Shell({

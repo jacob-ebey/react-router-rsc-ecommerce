@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import type { ResultOf, FragmentOf } from "gql.tada";
+import type { ResultOf } from "gql.tada";
 
 export const cartFragment = graphql(`
   fragment CartFragment on Cart {

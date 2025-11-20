@@ -202,7 +202,7 @@ const mockData = {
 
 let i = 0;
 
-async function action(formData: FormData) {
+async function action() {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   if (i++ % 2 === 0) {
     return { success: true };
