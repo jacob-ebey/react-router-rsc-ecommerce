@@ -71,7 +71,7 @@ const documentResponseStatus = (
 
 let rscStream = getRSCStream();
 
-if (documentResponseStatus) {
+if (documentResponseStatus === 200) {
   let [stream, cacheStream] = rscStream.tee();
   rscStream = stream;
   openDataCachePromise.then((cache) => {

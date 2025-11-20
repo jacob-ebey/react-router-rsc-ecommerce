@@ -1,13 +1,7 @@
 "use client";
 
 import { events } from "@remix-run/events";
-import {
-  startTransition,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { startTransition, useCallback, useEffect, useState } from "react";
 import {
   isRouteErrorResponse,
   Link,

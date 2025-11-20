@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, startTransition } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function MinimumLoadingTime({
   isLoading,
@@ -18,9 +18,7 @@ export function MinimumLoadingTime({
   useEffect(() => {
     if (isLoading && !showLoading) {
       loadingStartTime.current = Date.now();
-      startTransition(() => {
-        setShowLoading(true);
-      });
+      setShowLoading(true);
     }
 
     if (!isLoading && showLoading) {
@@ -29,15 +27,11 @@ export function MinimumLoadingTime({
 
       if (remainingTime > 0) {
         timeoutRef.current = setTimeout(() => {
-          startTransition(() => {
-            setShowLoading(false);
-          });
+          setShowLoading(false);
           loadingStartTime.current = null;
         }, remainingTime);
       } else {
-        startTransition(() => {
-          setShowLoading(false);
-        });
+        setShowLoading(false);
         loadingStartTime.current = null;
       }
     }
