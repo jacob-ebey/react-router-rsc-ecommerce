@@ -34,36 +34,41 @@ export default async function CategoryRoute({
         <Grid nested>
           <GridRow className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
             {products!.map((product, index) => (
-              <GridCol key={product.handle}>
-                <ProductCard
-                  to={`/p/${product.handle}`}
-                  className="h-full p-4 -outline-offset-2"
-                >
-                  <ProductCardImages
-                    viewTransitionName={`product-image--${product.handle}`}
-                    loading={index < 4 ? "eager" : "lazy"}
-                    images={product.images.nodes.map(
-                      (img) => img.url as string,
-                    )}
-                  />
+              <ViewTransition
+                key={product.handle}
+                name={`product-card--${product.handle}`}
+              >
+                <GridCol>
+                  <ProductCard
+                    to={`/p/${product.handle}`}
+                    className="h-full p-4 -outline-offset-2"
+                  >
+                    <ProductCardImages
+                      viewTransitionName={`product-image--${product.handle}`}
+                      loading={index < 4 ? "eager" : "lazy"}
+                      images={product.images.nodes.map(
+                        (img) => img.url as string,
+                      )}
+                    />
 
-                  <ProductCardBody>
-                    <ViewTransition name={`product-title--${product.handle}`}>
-                      <ProductCardTitle>{product.title}</ProductCardTitle>
-                    </ViewTransition>
-                    <ViewTransition name={`product-price--${product.handle}`}>
-                      <ProductCardPrice
-                        currency={
-                          product.priceRange.minVariantPrice.currencyCode
-                        }
-                        amount={
-                          product.priceRange.minVariantPrice.amount as string
-                        }
-                      />
-                    </ViewTransition>
-                  </ProductCardBody>
-                </ProductCard>
-              </GridCol>
+                    <ProductCardBody>
+                      <ViewTransition name={`product-title--${product.handle}`}>
+                        <ProductCardTitle>{product.title}</ProductCardTitle>
+                      </ViewTransition>
+                      <ViewTransition name={`product-price--${product.handle}`}>
+                        <ProductCardPrice
+                          currency={
+                            product.priceRange.minVariantPrice.currencyCode
+                          }
+                          amount={
+                            product.priceRange.minVariantPrice.amount as string
+                          }
+                        />
+                      </ViewTransition>
+                    </ProductCardBody>
+                  </ProductCard>
+                </GridCol>
+              </ViewTransition>
             ))}
             <FillRow
               cols={[
