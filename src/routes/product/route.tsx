@@ -143,33 +143,48 @@ async function RecommendedProducts({ productId }: { productId: string }) {
       <Grid nested>
         <GridRow className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
           {recommendedProducts.map((recommendedProduct) => (
-            <GridCol key={recommendedProduct.handle}>
-              <ProductCard
-                to={`/p/${recommendedProduct.handle}`}
-                className="h-full p-4 -outline-offset-2"
-              >
-                <ProductCardImages
-                  loading="lazy"
-                  images={recommendedProduct.images.nodes.map(
-                    (img) => img.url as string,
-                  )}
-                />
-                <ProductCardBody>
-                  <ProductCardTitle>
-                    {recommendedProduct.title}
-                  </ProductCardTitle>
-                  <ProductCardPrice
-                    currency={
-                      recommendedProduct.priceRange.minVariantPrice.currencyCode
-                    }
-                    amount={
-                      recommendedProduct.priceRange.minVariantPrice
-                        .amount as string
-                    }
+            <ViewTransition
+              key={recommendedProduct.handle}
+              name={`product-card--${recommendedProduct.handle}`}
+            >
+              <GridCol>
+                <ProductCard
+                  to={`/p/${recommendedProduct.handle}`}
+                  className="h-full p-4 -outline-offset-2"
+                >
+                  <ProductCardImages
+                    viewTransitionName={`product-image--${recommendedProduct.handle}`}
+                    loading="lazy"
+                    images={recommendedProduct.images.nodes.map(
+                      (img) => img.url as string,
+                    )}
                   />
-                </ProductCardBody>
-              </ProductCard>
-            </GridCol>
+                  <ProductCardBody>
+                    <ViewTransition
+                      name={`product-title--${recommendedProduct.handle}`}
+                    >
+                      <ProductCardTitle>
+                        {recommendedProduct.title}
+                      </ProductCardTitle>
+                    </ViewTransition>
+                    <ViewTransition
+                      name={`product-price--${recommendedProduct.handle}`}
+                    >
+                      <ProductCardPrice
+                        currency={
+                          recommendedProduct.priceRange.minVariantPrice
+                            .currencyCode
+                        }
+                        amount={
+                          recommendedProduct.priceRange.minVariantPrice
+                            .amount as string
+                        }
+                      />
+                    </ViewTransition>
+                  </ProductCardBody>
+                </ProductCard>
+              </GridCol>
+            </ViewTransition>
           ))}
           <FillRow
             cols={[
