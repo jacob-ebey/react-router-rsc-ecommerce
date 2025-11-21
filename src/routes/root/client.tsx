@@ -127,7 +127,7 @@ export function Shell({
                       Soft wear for engineers of all kinds
                     </div>
                   </GridCol>
-                  <GridCol className="aspect-square flex text-3xl sm:h-full">
+                  <GridCol className="aspect-square flex text-3xl sm:h-full overflow-hidden">
                     <NavLink
                       role="button"
                       to="/cart"

@@ -33,44 +33,37 @@ export default async function ProductRoute({
         <Grid nested>
           <GridRow className="grid-cols-1 lg:grid-cols-[3fr_2fr]">
             {/* Product Images */}
-            <ViewTransition>
-              <GridCol>
-                <Grid nested>
-                  <GridRow>
-                    {product.images.nodes.map((image, index) => (
-                      <GridCol
-                        key={image.url as string}
-                        className="relative aspect-square overflow-hidden"
-                      >
-                        {(() => {
-                          const Wrapper =
-                            index === 0 ? ViewTransition : Fragment;
-                          const props =
-                            Wrapper === ViewTransition
-                              ? {
-                                  name: `product-image--${product.handle}`,
-                                }
-                              : {};
-                          return (
-                            <Wrapper {...props}>
-                              <img
-                                src={image.url as string}
-                                alt={
-                                  image.altText ||
-                                  `${product.title} - Image ${index + 1}`
-                                }
-                                className="h-full w-full object-cover"
-                                loading={index === 0 ? "eager" : "lazy"}
-                              />
-                            </Wrapper>
-                          );
-                        })()}
-                      </GridCol>
-                    ))}
-                  </GridRow>
-                </Grid>
-              </GridCol>
-            </ViewTransition>
+            <GridCol>
+              {product.images.nodes.map((image, index) => (
+                <div
+                  key={image.url as string}
+                  className="relative aspect-square overflow-hidden"
+                >
+                  {(() => {
+                    const Wrapper = index === 0 ? ViewTransition : Fragment;
+                    const props =
+                      Wrapper === ViewTransition
+                        ? {
+                            name: `product-image--${product.handle}`,
+                          }
+                        : {};
+                    return (
+                      <Wrapper {...props}>
+                        <img
+                          src={image.url as string}
+                          alt={
+                            image.altText ||
+                            `${product.title} - Image ${index + 1}`
+                          }
+                          className="h-full w-full object-cover"
+                          loading={index === 0 ? "eager" : "lazy"}
+                        />
+                      </Wrapper>
+                    );
+                  })()}
+                </div>
+              ))}
+            </GridCol>
 
             {/* Product Details */}
             <GridCol>
