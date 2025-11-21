@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useTransition } from "react";
 
 export function MinimumLoadingTime({
   isLoading,
@@ -11,27 +11,37 @@ export function MinimumLoadingTime({
   minimumLoadingTime?: number;
   children?: React.ReactNode;
 }) {
-  const [showLoading, setShowLoading] = useState(isLoading);
+  const [pending, startTransition] = useTransition();
+  const [_showLoading, setShowLoading] = useState(isLoading);
   const loadingStartTime = useRef<number>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const showLoading = _showLoading || pending;
+
+  if (_showLoading !== isLoading) {
+    setShowLoading(isLoading);
+  }
 
   useEffect(() => {
-    if (isLoading && !showLoading) {
+    if (isLoading && !_showLoading) {
       loadingStartTime.current = Date.now();
-      setShowLoading(true);
+      // setShowLoading(true);
     }
 
-    if (!isLoading && showLoading) {
+    if (!isLoading && _showLoading) {
       const elapsedTime = Date.now() - (loadingStartTime.current || 0);
       const remainingTime = minimumLoadingTime - elapsedTime;
 
       if (remainingTime > 0) {
         timeoutRef.current = setTimeout(() => {
-          setShowLoading(false);
+          startTransition(() => {
+            setShowLoading(false);
+          });
           loadingStartTime.current = null;
         }, remainingTime);
       } else {
-        setShowLoading(false);
+        startTransition(() => {
+          setShowLoading(false);
+        });
         loadingStartTime.current = null;
       }
     }
@@ -41,7 +51,10 @@ export function MinimumLoadingTime({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [isLoading, showLoading, minimumLoadingTime]);
+  }, [isLoading, minimumLoadingTime]);
 
-  return showLoading ? children : null;
+  return (
+    <div style={{ display: showLoading ? "block" : "none" }}>{children}</div>
+  );
+  // return showLoading ? children : null;
 }
