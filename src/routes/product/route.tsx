@@ -19,8 +19,6 @@ import { NotFoundError } from "@/lib/errors";
 import { getClient } from "@/lib/gql";
 import { setCartOpen } from "@/routes/root/client";
 
-import { ProductRouteTransition } from "./client";
-
 export default async function ProductRoute({
   params: { productHandle },
 }: Register["pages"]["/p/:productHandle"]) {
@@ -31,8 +29,11 @@ export default async function ProductRoute({
       <title>{`${product.title} | Remix Store`}</title>
       <meta name="description" content={product.description || product.title} />
 
-      <ProductRouteTransition handle={product.handle}>
-        <Grid nested>
+      <Grid nested>
+        <ViewTransition
+          key={product.id}
+          name={`product-card--${product.handle}`}
+        >
           <GridRow className="grid-cols-1 lg:grid-cols-[3fr_2fr]">
             {/* Product Images */}
             <GridCol>
@@ -47,6 +48,9 @@ export default async function ProductRoute({
                       Wrapper === ViewTransition
                         ? {
                             name: `product-image--${product.handle}`,
+                            enter: "mix-blend-overlay opacity-1",
+                            default: "mix-blend-overlay opacity-1",
+                            share: "mix-blend-overlay opacity-1",
                           }
                         : {};
                     return (
@@ -126,8 +130,8 @@ export default async function ProductRoute({
               <RecommendedProducts productId={product.id} />
             </Suspense>
           </GridRow>
-        </Grid>
-      </ProductRouteTransition>
+        </ViewTransition>
+      </Grid>
     </>
   );
 }
@@ -143,47 +147,52 @@ async function RecommendedProducts({ productId }: { productId: string }) {
     <Grid nested>
       <GridRow className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
         {recommendedProducts.map((recommendedProduct) => (
-          <GridCol key={recommendedProduct.handle}>
-            <ProductCard
-              to={`/p/${recommendedProduct.handle}`}
-              className="h-full p-4 -outline-offset-2"
-            >
-              <ProductCardImages
-                loading="lazy"
-                viewTransitionName={`product-image--${recommendedProduct.handle}`}
-                images={recommendedProduct.images.nodes.map(
-                  (img) => img.url as string,
-                )}
-              />
-              <ViewTransition
-                name={`product-card-body--${recommendedProduct.handle}`}
+          <ViewTransition
+            key={recommendedProduct.handle}
+            name={`product-card--${recommendedProduct.handle}`}
+          >
+            <GridCol>
+              <ProductCard
+                to={`/p/${recommendedProduct.handle}`}
+                className="h-full p-4 -outline-offset-2"
               >
-                <ProductCardBody>
-                  <ViewTransition
-                    name={`product-title--${recommendedProduct.handle}`}
-                  >
-                    <ProductCardTitle>
-                      {recommendedProduct.title}
-                    </ProductCardTitle>
-                  </ViewTransition>
-                  <ViewTransition
-                    name={`product-price--${recommendedProduct.handle}`}
-                  >
-                    <ProductCardPrice
-                      currency={
-                        recommendedProduct.priceRange.minVariantPrice
-                          .currencyCode
-                      }
-                      amount={
-                        recommendedProduct.priceRange.minVariantPrice
-                          .amount as string
-                      }
-                    />
-                  </ViewTransition>
-                </ProductCardBody>
-              </ViewTransition>
-            </ProductCard>
-          </GridCol>
+                <ProductCardImages
+                  loading="lazy"
+                  viewTransitionName={`product-image--${recommendedProduct.handle}`}
+                  images={recommendedProduct.images.nodes.map(
+                    (img) => img.url as string,
+                  )}
+                />
+                <ViewTransition
+                  name={`product-card-body--${recommendedProduct.handle}`}
+                >
+                  <ProductCardBody>
+                    <ViewTransition
+                      name={`product-title--${recommendedProduct.handle}`}
+                    >
+                      <ProductCardTitle>
+                        {recommendedProduct.title}
+                      </ProductCardTitle>
+                    </ViewTransition>
+                    <ViewTransition
+                      name={`product-price--${recommendedProduct.handle}`}
+                    >
+                      <ProductCardPrice
+                        currency={
+                          recommendedProduct.priceRange.minVariantPrice
+                            .currencyCode
+                        }
+                        amount={
+                          recommendedProduct.priceRange.minVariantPrice
+                            .amount as string
+                        }
+                      />
+                    </ViewTransition>
+                  </ProductCardBody>
+                </ViewTransition>
+              </ProductCard>
+            </GridCol>
+          </ViewTransition>
         ))}
         <FillRow
           cols={[

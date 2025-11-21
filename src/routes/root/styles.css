@@ -8,6 +8,7 @@
   --color-text: #000;
   --color-text-dimmed: #666;
   --color-error: #f44250;
+  --color-backdrop: rgba(0, 0, 0, 0.4);
 }
 
 @theme {
@@ -17,6 +18,7 @@
   --color-text: var(--color-text);
   --color-text-dimmed: var(--color-text-dimmed);
   --color-error: var(--color-error);
+  --color-backdrop: var(--color-backdrop);
   --default-font-family: Menlo, sans-serif;
   --reveal-speed: 0.2s;
 }
@@ -31,6 +33,14 @@
 
 
 @layer base {
+  ::view-transition-image-pair(*) {
+    z-index: 100;
+  }
+
+  ::backdrop {
+    @apply bg-transparent;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     ::view-transition-group(*) {
       animation-duration: 0s !important;

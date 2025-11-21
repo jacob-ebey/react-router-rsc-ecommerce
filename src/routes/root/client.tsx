@@ -141,17 +141,6 @@ export function Shell({
                       </div>
                     </div>
                   </NavLink>
-                  <Sidebar open={cartOpen} onClose={() => setCartOpen(false)}>
-                    <Button
-                      size="sm"
-                      aria-label="Close cart"
-                      className="fixed top-4 right-4 z-20"
-                      onClick={() => setCartOpen(false)}
-                    >
-                      &#10005;
-                    </Button>
-                    {cart}
-                  </Sidebar>
                 </GridCol>
               </GridRow>
             </header>
@@ -323,7 +312,7 @@ export function Shell({
           </footer>
         </Grid>
 
-        <Sidebar open={cartOpen} onClose={() => setCartOpen(false)}>
+        <Sidebar name="cart" open={cartOpen} onClose={() => setCartOpen(false)}>
           <Button
             size="sm"
             aria-label="Close cart"

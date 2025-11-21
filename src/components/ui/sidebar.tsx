@@ -5,12 +5,13 @@ import { incrementScrollLock } from "./scroll-lock";
 
 export function Sidebar({
   children,
+  name,
   open: _open,
   onClose,
   ...props
 }: {
   children?: React.ReactNode;
-  id?: string;
+  name: string;
   open: boolean;
   onClose: () => void;
 }) {
@@ -55,29 +56,26 @@ export function Sidebar({
   );
 
   return (
-    <dialog
-      {...props}
-      ref={dialogRef}
-      onClick={(event) => {
-        if (event.target !== event.currentTarget) return;
+    <ViewTransition name={name}>
+      <dialog
+        {...props}
+        ref={dialogRef}
+        className="max-w-none max-h-none h-full w-full bg-backdrop"
+        onClick={(event) => {
+          if (event.target !== event.currentTarget) return;
 
-        const dialog = event.currentTarget;
-        const rect = dialog.getBoundingClientRect();
-        const isInDialog =
-          rect.top <= event.clientY &&
-          event.clientY <= rect.top + rect.height &&
-          rect.left <= event.clientX &&
-          event.clientX <= rect.left + rect.width;
-        if (!isInDialog && dialog.open) {
-          dialog.close();
-        }
-      }}
-    >
-      <ViewTransition>
-        <div className="fixed bg-background paper max-w-96 w-full top-0 right-0 bottom-0 border-2 border-border overflow-y-auto">
-          {children}
-        </div>
-      </ViewTransition>
-    </dialog>
+          const dialog = event.currentTarget;
+          if (dialog.open) {
+            dialog.close();
+          }
+        }}
+      >
+        <ViewTransition>
+          <div className="absolute bg-background paper max-w-96 w-full top-0 right-0 bottom-0 border-2 border-border overflow-y-auto">
+            {children}
+          </div>
+        </ViewTransition>
+      </dialog>
+    </ViewTransition>
   );
 }
