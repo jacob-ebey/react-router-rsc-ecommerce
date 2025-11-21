@@ -68,36 +68,42 @@ export default async function ProductRoute({
             {/* Product Details */}
             <GridCol>
               <ViewTransition name="product-details">
-                <div className="space-y-6 p-4 md:p-6 sticky top-0 paper border-y-2 -mt-0.5 -mb-0.5">
-                  <div>
-                    <ViewTransition name={`product-title--${product.handle}`}>
-                      <h1 className="text-3xl font-bold tracking-tight">
-                        {product.title}
-                      </h1>
-                    </ViewTransition>
-                  </div>
+                <div className="sticky top-0 paper border-y-2 -mt-0.5 -mb-0.5">
+                  <ViewTransition name={`product-card--${product.handle}`}>
+                    <div className="space-y-6 p-4 md:p-6 ">
+                      <div>
+                        <ViewTransition
+                          name={`product-title--${product.handle}`}
+                        >
+                          <h1 className="text-3xl font-bold tracking-tight">
+                            {product.title}
+                          </h1>
+                        </ViewTransition>
+                      </div>
 
-                  {product.description && (
-                    <div className="prose text-text-dimmed max-w-none">
-                      <p>{product.description}</p>
+                      {product.description && (
+                        <div className="prose text-text-dimmed max-w-none">
+                          <p>{product.description}</p>
+                        </div>
+                      )}
+
+                      <AddToCartForm
+                        action={addToCartAction}
+                        product={readFragment(productOptionsFragment, product)}
+                        onAddToCart={setCartOpen}
+                      />
+
+                      {/* Product Meta */}
+                      {product.vendor && (
+                        <div className="text-sm text-text-dimmed-600">
+                          <p>
+                            <span className="font-medium">Vendor:</span>{" "}
+                            {product.vendor}
+                          </p>
+                        </div>
+                      )}
                     </div>
-                  )}
-
-                  <AddToCartForm
-                    action={addToCartAction}
-                    product={readFragment(productOptionsFragment, product)}
-                    onAddToCart={setCartOpen}
-                  />
-
-                  {/* Product Meta */}
-                  {product.vendor && (
-                    <div className="text-sm text-text-dimmed-600">
-                      <p>
-                        <span className="font-medium">Vendor:</span>{" "}
-                        {product.vendor}
-                      </p>
-                    </div>
-                  )}
+                  </ViewTransition>
                 </div>
               </ViewTransition>
             </GridCol>

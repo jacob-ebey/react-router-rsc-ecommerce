@@ -50,22 +50,30 @@ export default async function CategoryRoute({
                         (img) => img.url as string,
                       )}
                     />
-
-                    <ProductCardBody>
-                      <ViewTransition name={`product-title--${product.handle}`}>
-                        <ProductCardTitle>{product.title}</ProductCardTitle>
-                      </ViewTransition>
-                      <ViewTransition name={`product-price--${product.handle}`}>
-                        <ProductCardPrice
-                          currency={
-                            product.priceRange.minVariantPrice.currencyCode
-                          }
-                          amount={
-                            product.priceRange.minVariantPrice.amount as string
-                          }
-                        />
-                      </ViewTransition>
-                    </ProductCardBody>
+                    <ViewTransition
+                      name={`product-card-body--${product.handle}`}
+                    >
+                      <ProductCardBody>
+                        <ViewTransition
+                          name={`product-title--${product.handle}`}
+                        >
+                          <ProductCardTitle>{product.title}</ProductCardTitle>
+                        </ViewTransition>
+                        <ViewTransition
+                          name={`product-price--${product.handle}`}
+                        >
+                          <ProductCardPrice
+                            currency={
+                              product.priceRange.minVariantPrice.currencyCode
+                            }
+                            amount={
+                              product.priceRange.minVariantPrice
+                                .amount as string
+                            }
+                          />
+                        </ViewTransition>
+                      </ProductCardBody>
+                    </ViewTransition>
                   </ProductCard>
                 </GridCol>
               </ViewTransition>

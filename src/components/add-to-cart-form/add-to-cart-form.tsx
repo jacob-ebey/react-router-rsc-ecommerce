@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState, useMemo, useState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router";
 
 import { Button, buttonStyles } from "@/components/ui/button";
@@ -104,13 +104,11 @@ export function AddToCartForm({
   };
 
   const handleOptionSelect = (name: string, value: string) => {
-    startTransition(() => {
-      setSelectedOptions((prev) => {
-        const newSelectedOptions = getNewSelectedOptions(prev, name, value);
-        history.replaceState(null, "", newSelectedOptions.location);
+    setSelectedOptions((prev) => {
+      const newSelectedOptions = getNewSelectedOptions(prev, name, value);
+      history.replaceState(null, "", newSelectedOptions.location);
 
-        return newSelectedOptions.options;
-      });
+      return newSelectedOptions.options;
     });
   };
 
