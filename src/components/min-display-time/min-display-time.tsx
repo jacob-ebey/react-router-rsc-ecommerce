@@ -24,7 +24,6 @@ export function MinimumLoadingTime({
   useEffect(() => {
     if (isLoading && !_showLoading) {
       loadingStartTime.current = Date.now();
-      // setShowLoading(true);
     }
 
     if (!isLoading && _showLoading) {

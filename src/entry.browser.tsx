@@ -29,7 +29,7 @@ let clearCachePromise: Promise<void> | null = null;
 const openDataCachePromise = openAndClearCache("react-router");
 function clearDataCache() {
   return (clearCachePromise = Promise.resolve(openDataCachePromise).then(() =>
-    openDataCachePromise.then((cache) => clearCache(cache))
+    openDataCachePromise.then((cache) => clearCache(cache)),
   ));
 }
 
@@ -60,7 +60,7 @@ setServerCallback(
     createTemporaryReferenceSet,
     encodeReply,
     fetch: fetchServer,
-  })
+  }),
 );
 
 const documentResponseStatus = (
@@ -83,7 +83,7 @@ if (documentResponseStatus === 200) {
     }
     cache.put(
       url,
-      new Response(cacheStream, { status: documentResponseStatus })
+      new Response(cacheStream, { status: documentResponseStatus }),
     );
   });
 }
@@ -111,7 +111,7 @@ Promise.resolve(createFromReadableStream<RSCServerPayload>(rscStream))
           onUncaughtError(error, errorInfo) {
             console.error("Uncaught React error:", error, errorInfo);
           },
-        }
+        },
       );
     });
   })
