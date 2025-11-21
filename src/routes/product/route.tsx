@@ -68,7 +68,7 @@ export default async function ProductRoute({
 
               {/* Product Details */}
               <GridCol>
-                <ViewTransition name="product-details">
+                <ViewTransition key={product.id}>
                   <div className="sticky top-0 paper border-y-2 -mt-0.5 -mb-0.5">
                     <ViewTransition
                       key={product.handle}
@@ -158,7 +158,7 @@ async function RecommendedProducts({ productId }: { productId: string }) {
           {recommendedProducts.map((recommendedProduct) => (
             <ViewTransition
               key={recommendedProduct.handle}
-              name={`product-card--${recommendedProduct.handle}`}
+              name={`product-recomendation-card--${recommendedProduct.handle}`}
             >
               <GridCol>
                 <ProductCard
