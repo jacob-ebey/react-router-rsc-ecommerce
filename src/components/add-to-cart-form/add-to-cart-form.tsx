@@ -1,6 +1,12 @@
 "use client";
 
-import { useActionState, useMemo, useState, ViewTransition } from "react";
+import {
+  startTransition,
+  useActionState,
+  useMemo,
+  useState,
+  ViewTransition,
+} from "react";
 import { Link, useLocation } from "react-router";
 
 import { Button, buttonStyles } from "@/components/ui/button";
@@ -121,7 +127,9 @@ export function AddToCartForm({
     const result = await addToCartPromise;
 
     if (result.success) {
-      onAddToCart?.();
+      startTransition(() => {
+        onAddToCart?.();
+      });
     }
 
     return result;
