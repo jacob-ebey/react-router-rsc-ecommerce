@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef, ViewTransition } from "react";
 import { Link } from "react-router";
 
 import { DotMatrix } from "@/components/dot-matrix/dot-matrix";
@@ -76,7 +76,7 @@ export function ProductCard({
         },
         {
           signal: controller.signal,
-        }
+        },
       );
       addEventListener(
         "resize",
@@ -87,7 +87,7 @@ export function ProductCard({
         },
         {
           signal: controller.signal,
-        }
+        },
       );
     }, 500);
 
@@ -103,7 +103,7 @@ export function ProductCard({
       data-testid="product-card"
       className={cn(
         "relative flex flex-col gap-4 dot-matrix-trigger hover:text-primary-blue focus-visible:text-primary-blue",
-        className
+        className,
       )}
       style={
         {
@@ -120,22 +120,34 @@ export function ProductCard({
 export function ProductCardImages({
   images,
   loading,
+  viewTransitionName,
 }: {
   images: string[];
   loading?: React.ComponentProps<"img">["loading"];
+  viewTransitionName?: string;
 }) {
   if (!images.length) return null;
+
+  let Wrapper: any = viewTransitionName ? ViewTransition : Fragment;
+  let props: any =
+    Wrapper === ViewTransition
+      ? {
+          name: viewTransitionName,
+        }
+      : {};
 
   if (images.length === 1) {
     return (
       <DotMatrix>
         <picture className="block w-full aspect-square relative">
-          <img
-            className="absolute inset-0 object-cover"
-            alt=""
-            src={images[0]}
-            loading={loading}
-          />
+          <Wrapper {...props}>
+            <img
+              className="absolute inset-0 object-cover"
+              alt=""
+              src={images[0]}
+              loading={loading}
+            />
+          </Wrapper>
         </picture>
       </DotMatrix>
     );
@@ -146,16 +158,28 @@ export function ProductCardImages({
       <div className="crossfade-container-trigger" />
       <div className="crossfade-container">
         <DotMatrix>
-          {images.map((image, index) => (
-            <picture key={`${index}|${image}`}>
-              <img
-                className="object-cover w-full aspect-square"
-                alt=""
-                src={image}
-                loading={index === 0 ? loading : "lazy"}
-              />
-            </picture>
-          ))}
+          {images.map((image, index) => {
+            let Wrap: any = Fragment;
+            let props: any = {};
+            if (index === 0 && viewTransitionName) {
+              Wrap = ViewTransition;
+              props = {
+                name: viewTransitionName,
+              };
+            }
+            return (
+              <picture key={`${index}|${image}`}>
+                <Wrap {...props}>
+                  <img
+                    className="object-cover w-full aspect-square"
+                    alt=""
+                    src={image}
+                    loading={index === 0 ? loading : "lazy"}
+                  />
+                </Wrap>
+              </picture>
+            );
+          })}
         </DotMatrix>
       </div>
     </>

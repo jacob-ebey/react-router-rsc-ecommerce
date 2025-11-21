@@ -1,5 +1,5 @@
 import { graphql, readFragment } from "gql.tada";
-import { Suspense } from "react";
+import { Fragment, Suspense, ViewTransition } from "react";
 import type { Register } from "react-router";
 
 import { AddToCartForm } from "@/components/add-to-cart-form/add-to-cart-form";
@@ -41,15 +41,28 @@ export default async function ProductRoute({
                       key={image.url as string}
                       className="relative aspect-square overflow-hidden"
                     >
-                      <img
-                        src={image.url as string}
-                        alt={
-                          image.altText ||
-                          `${product.title} - Image ${index + 1}`
-                        }
-                        className="h-full w-full object-cover"
-                        loading={index === 0 ? "eager" : "lazy"}
-                      />
+                      {(() => {
+                        const Wrapper = index === 0 ? ViewTransition : Fragment;
+                        const props =
+                          Wrapper === ViewTransition
+                            ? {
+                                name: `product-image--${product.handle}`,
+                              }
+                            : {};
+                        return (
+                          <Wrapper {...props}>
+                            <img
+                              src={image.url as string}
+                              alt={
+                                image.altText ||
+                                `${product.title} - Image ${index + 1}`
+                              }
+                              className="h-full w-full object-cover"
+                              loading={index === 0 ? "eager" : "lazy"}
+                            />
+                          </Wrapper>
+                        );
+                      })()}
                     </GridCol>
                   ))}
                 </GridRow>
@@ -59,11 +72,13 @@ export default async function ProductRoute({
             {/* Product Details */}
             <GridCol>
               <div className="space-y-6 p-4 md:p-6 sticky top-0 paper border-y-2 -mt-0.5 -mb-0.5">
-                <div>
-                  <h1 className="text-3xl font-bold tracking-tight">
-                    {product.title}
-                  </h1>
-                </div>
+                <ViewTransition name={`product-title--${product.handle}`}>
+                  <div>
+                    <h1 className="text-3xl font-bold tracking-tight">
+                      {product.title}
+                    </h1>
+                  </div>
+                </ViewTransition>
 
                 {product.description && (
                   <div className="prose text-text-dimmed max-w-none">
@@ -115,7 +130,7 @@ export default async function ProductRoute({
 
 async function RecommendedProducts({ productId }: { productId: string }) {
   const recommendedProducts = await getRecommendedProducts(productId).then(
-    (all) => all?.slice(0, 8)
+    (all) => all?.slice(0, 8),
   );
 
   if (!recommendedProducts?.length) return null;
@@ -133,7 +148,7 @@ async function RecommendedProducts({ productId }: { productId: string }) {
                 <ProductCardImages
                   loading="lazy"
                   images={recommendedProduct.images.nodes.map(
-                    (img) => img.url as string
+                    (img) => img.url as string,
                   )}
                 />
                 <ProductCardBody>
@@ -192,9 +207,9 @@ async function getProduct(handle: string) {
           }
         }
       `,
-      [productOptionsFragment]
+      [productOptionsFragment],
     ),
-    { handle }
+    { handle },
   );
 
   if (!result.data?.product) {
@@ -229,7 +244,7 @@ async function getRecommendedProducts(productId: string) {
         }
       }
     `),
-    { productId }
+    { productId },
   );
 
   return result.data?.productRecommendations;

@@ -1,6 +1,12 @@
 "use client";
 
-import { startTransition, useActionState, useMemo, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useMemo,
+  useState,
+  ViewTransition,
+} from "react";
 import { Link, useLocation } from "react-router";
 
 import { Button, buttonStyles } from "@/components/ui/button";
@@ -177,22 +183,24 @@ export function AddToCartForm({
         <div className="space-y-2">
           <p>
             <span className="font-semibold">Price:</span>{" "}
-            <span>
-              {selectedVariant ? (
-                formatPrice(selectedVariant.price)
-              ) : (
-                <span>
-                  {formatPrice(priceRange.minVariantPrice)}
-                  {priceRange.minVariantPrice.amount !==
-                  priceRange.maxVariantPrice.amount ? (
-                    <>
-                      &nbsp;&ndash;&nbsp;
-                      {formatPrice(priceRange.maxVariantPrice)}
-                    </>
-                  ) : null}
-                </span>
-              )}
-            </span>
+            <ViewTransition name={`product-price--${product.handle}`}>
+              <span>
+                {selectedVariant ? (
+                  formatPrice(selectedVariant.price)
+                ) : (
+                  <span>
+                    {formatPrice(priceRange.minVariantPrice)}
+                    {priceRange.minVariantPrice.amount !==
+                    priceRange.maxVariantPrice.amount ? (
+                      <>
+                        &nbsp;&ndash;&nbsp;
+                        {formatPrice(priceRange.maxVariantPrice)}
+                      </>
+                    ) : null}
+                  </span>
+                )}
+              </span>
+            </ViewTransition>
           </p>
           <p>
             <span className="font-semibold">Availability:</span>{" "}

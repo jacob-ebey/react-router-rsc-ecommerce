@@ -29,9 +29,16 @@
   background-position: var(--paper-position);
 }
 
+
 @layer base {
   * {
     @apply border-border outline-primary-blue;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*) {
+      animation-duration: 0s !important;
+    }
   }
 
   html,
@@ -45,7 +52,8 @@
 
   .progress {
     animation: progress 2s infinite linear;
-    @media (width >= 48rem) {
+
+    @media (width >=48rem) {
       animation: progress 3s infinite linear;
     }
   }
@@ -58,6 +66,7 @@
     0% {
       transform: translateX(-100px);
     }
+
     100% {
       transform: translateX(100%);
     }

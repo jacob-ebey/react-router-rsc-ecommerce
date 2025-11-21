@@ -1,4 +1,6 @@
 import { graphql } from "gql.tada";
+import { ViewTransition } from "react";
+import type { Register } from "react-router";
 
 import { FillRow, Grid, GridCol, GridRow } from "@/components/grid/grid";
 import {
@@ -10,7 +12,6 @@ import {
 } from "@/components/product-card/product-card";
 import { cacheLife } from "@/lib/cache";
 import { getClient } from "@/lib/gql";
-import type { Register } from "react-router";
 
 type CategoryRouteProps = Register["pages"]["/"] &
   Register["pages"]["/c/:collectionHandle"];
@@ -18,9 +19,8 @@ type CategoryRouteProps = Register["pages"]["/"] &
 export default async function CategoryRoute({
   params: { collectionHandle = "all" },
 }: CategoryRouteProps) {
-  const { title, description, products } = await getCollection(
-    collectionHandle
-  );
+  const { title, description, products } =
+    await getCollection(collectionHandle);
 
   return (
     <>
@@ -40,21 +40,27 @@ export default async function CategoryRoute({
                   className="h-full p-4 -outline-offset-2"
                 >
                   <ProductCardImages
+                    viewTransitionName={`product-image--${product.handle}`}
                     loading={index < 4 ? "eager" : "lazy"}
                     images={product.images.nodes.map(
-                      (img) => img.url as string
+                      (img) => img.url as string,
                     )}
                   />
 
                   <ProductCardBody>
-                    <ProductCardTitle>{product.title}</ProductCardTitle>
-
-                    <ProductCardPrice
-                      currency={product.priceRange.minVariantPrice.currencyCode}
-                      amount={
-                        product.priceRange.minVariantPrice.amount as string
-                      }
-                    />
+                    <ViewTransition name={`product-title--${product.handle}`}>
+                      <ProductCardTitle>{product.title}</ProductCardTitle>
+                    </ViewTransition>
+                    <ViewTransition name={`product-price--${product.handle}`}>
+                      <ProductCardPrice
+                        currency={
+                          product.priceRange.minVariantPrice.currencyCode
+                        }
+                        amount={
+                          product.priceRange.minVariantPrice.amount as string
+                        }
+                      />
+                    </ViewTransition>
                   </ProductCardBody>
                 </ProductCard>
               </GridCol>
