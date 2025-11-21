@@ -62,7 +62,7 @@ export default async function ProductRoute({
                             `${product.title} - Image ${index + 1}`
                           }
                           className="h-full w-full object-cover"
-                          loading={index === 0 ? "eager" : "lazy"}
+                          loading="lazy"
                         />
                       </Wrapper>
                     );
@@ -157,7 +157,6 @@ async function RecommendedProducts({ productId }: { productId: string }) {
                 className="h-full p-4 -outline-offset-2"
               >
                 <ProductCardImages
-                  loading="lazy"
                   viewTransitionName={`product-image--${recommendedProduct.handle}`}
                   images={recommendedProduct.images.nodes.map(
                     (img) => img.url as string,

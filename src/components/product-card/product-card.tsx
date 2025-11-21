@@ -119,11 +119,9 @@ export function ProductCard({
 
 export function ProductCardImages({
   images,
-  loading,
   viewTransitionName,
 }: {
   images: string[];
-  loading?: React.ComponentProps<"img">["loading"];
   viewTransitionName?: string;
 }) {
   if (!images.length) return null;
@@ -145,7 +143,7 @@ export function ProductCardImages({
               className="absolute inset-0 object-cover"
               alt=""
               src={images[0]}
-              loading={loading}
+              loading="lazy"
             />
           </picture>
         </DotMatrix>
@@ -166,7 +164,7 @@ export function ProductCardImages({
                     className="object-cover w-full aspect-square"
                     alt=""
                     src={image}
-                    loading={index === 0 ? loading : "lazy"}
+                    loading="lazy"
                   />
                 </picture>
               );

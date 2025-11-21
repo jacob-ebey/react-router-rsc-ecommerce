@@ -33,7 +33,7 @@ export default async function CategoryRoute({
       {(products?.length ?? 0) > 0 ? (
         <Grid nested>
           <GridRow className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
-            {products!.map((product, index) => (
+            {products!.map((product) => (
               <ViewTransition
                 key={product.handle}
                 name={`product-card--${product.handle}`}
@@ -45,7 +45,6 @@ export default async function CategoryRoute({
                   >
                     <ProductCardImages
                       viewTransitionName={`product-image--${product.handle}`}
-                      loading={index < 4 ? "eager" : "lazy"}
                       images={product.images.nodes.map(
                         (img) => img.url as string,
                       )}

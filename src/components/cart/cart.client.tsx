@@ -280,6 +280,7 @@ function CartLineItem({
                 src={variant.image.url as string}
                 alt={product.title}
                 className="object-cover aspect-square"
+                loading="lazy"
               />
             </div>
           ) : null}
