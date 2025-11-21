@@ -29,8 +29,8 @@ export default async function ProductRoute({
       <title>{`${product.title} | Remix Store`}</title>
       <meta name="description" content={product.description || product.title} />
 
-      <ViewTransition name={`product-card--${product.handle}`}>
-        <GridCol>
+      <GridCol>
+        <ViewTransition name={`product-card--${product.handle}`}>
           <Grid nested>
             <GridRow className="grid-cols-1 lg:grid-cols-[3fr_2fr]">
               {/* Product Images */}
@@ -138,8 +138,8 @@ export default async function ProductRoute({
               </Suspense>
             </GridCol>
           </Grid>
-        </GridCol>
-      </ViewTransition>
+        </ViewTransition>
+      </GridCol>
     </>
   );
 }
