@@ -69,7 +69,10 @@ export default async function ProductRoute({
             <GridCol>
               <ViewTransition name="product-details">
                 <div className="sticky top-0 paper border-y-2 -mt-0.5 -mb-0.5">
-                  <ViewTransition name={`product-card--${product.handle}`}>
+                  <ViewTransition
+                    key={product.handle}
+                    name={`product-card--${product.handle}`}
+                  >
                     <div className="space-y-6 p-4 md:p-6 ">
                       <div>
                         <ViewTransition
@@ -145,31 +148,49 @@ async function RecommendedProducts({ productId }: { productId: string }) {
         <GridRow className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
           {recommendedProducts.map((recommendedProduct) => (
             <GridCol key={recommendedProduct.handle}>
-              <ProductCard
-                to={`/p/${recommendedProduct.handle}`}
-                className="h-full p-4 -outline-offset-2"
+              <ViewTransition
+                name={`product-card--${recommendedProduct.handle}`}
               >
-                <ProductCardImages
-                  loading="lazy"
-                  images={recommendedProduct.images.nodes.map(
-                    (img) => img.url as string,
-                  )}
-                />
-                <ProductCardBody>
-                  <ProductCardTitle>
-                    {recommendedProduct.title}
-                  </ProductCardTitle>
-                  <ProductCardPrice
-                    currency={
-                      recommendedProduct.priceRange.minVariantPrice.currencyCode
-                    }
-                    amount={
-                      recommendedProduct.priceRange.minVariantPrice
-                        .amount as string
-                    }
+                <ProductCard
+                  to={`/p/${recommendedProduct.handle}`}
+                  className="h-full p-4 -outline-offset-2"
+                >
+                  <ProductCardImages
+                    loading="lazy"
+                    viewTransitionName={`product-image--${recommendedProduct.handle}`}
+                    images={recommendedProduct.images.nodes.map(
+                      (img) => img.url as string,
+                    )}
                   />
-                </ProductCardBody>
-              </ProductCard>
+                  <ViewTransition
+                    name={`product-card-body--${recommendedProduct.handle}`}
+                  >
+                    <ProductCardBody>
+                      <ViewTransition
+                        name={`product-title--${recommendedProduct.handle}`}
+                      >
+                        <ProductCardTitle>
+                          {recommendedProduct.title}
+                        </ProductCardTitle>
+                      </ViewTransition>
+                      <ViewTransition
+                        name={`product-price--${recommendedProduct.handle}`}
+                      >
+                        <ProductCardPrice
+                          currency={
+                            recommendedProduct.priceRange.minVariantPrice
+                              .currencyCode
+                          }
+                          amount={
+                            recommendedProduct.priceRange.minVariantPrice
+                              .amount as string
+                          }
+                        />
+                      </ViewTransition>
+                    </ProductCardBody>
+                  </ViewTransition>
+                </ProductCard>
+              </ViewTransition>
             </GridCol>
           ))}
           <FillRow

@@ -34,11 +34,8 @@ export default async function CategoryRoute({
         <Grid nested>
           <GridRow className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
             {products!.map((product, index) => (
-              <ViewTransition
-                key={product.handle}
-                name={`product-card--${product.handle}`}
-              >
-                <GridCol>
+              <GridCol key={product.handle}>
+                <ViewTransition name={`product-card--${product.handle}`}>
                   <ProductCard
                     to={`/p/${product.handle}`}
                     className="h-full p-4 -outline-offset-2"
@@ -75,8 +72,8 @@ export default async function CategoryRoute({
                       </ProductCardBody>
                     </ViewTransition>
                   </ProductCard>
-                </GridCol>
-              </ViewTransition>
+                </ViewTransition>
+              </GridCol>
             ))}
             <FillRow
               cols={[
