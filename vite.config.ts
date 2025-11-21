@@ -6,7 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import rsc from "@vitejs/plugin-rsc/plugin";
 import { playwright } from "@vitest/browser-playwright";
-import { defineConfig } from "vite";
+import { defineConfig, normalizePath } from "vite";
 import devtoolsJson from "vite-plugin-devtools-json";
 import { useCachePlugin } from "vite-plugin-react-use-cache";
 import tsconfigPaths from "vite-tsconfig-paths";
@@ -18,6 +18,27 @@ const dirname =
     : path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  environments: {
+    client: {
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks(id) {
+              const normalized = normalizePath(id);
+              if (
+                normalized.includes("node_modules/react/") ||
+                normalized.includes("node_modules/react-dom/") ||
+                normalized.includes("node_modules/@vitejs/plugin-rsc/") ||
+                normalized.includes("node_modules/react-router/")
+              ) {
+                return "framework";
+              }
+            },
+          },
+        },
+      },
+    },
+  },
   plugins: [
     tsconfigPaths(),
     tailwindcss(),
