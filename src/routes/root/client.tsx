@@ -1,7 +1,7 @@
 "use client";
 
 import { on } from "@remix-run/interaction";
-import { startTransition, useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   isRouteErrorResponse,
   Link,
@@ -20,9 +20,7 @@ import { decodeError, StatusCodeError } from "@/lib/errors";
 import { cartSetOpenEvent, CartSetOpenEvent } from "./events";
 
 export function setCartOpen() {
-  startTransition(() => {
-    dispatchEvent(new CartSetOpenEvent(true));
-  });
+  dispatchEvent(new CartSetOpenEvent(true));
 }
 
 export function Shell({
@@ -35,12 +33,7 @@ export function Shell({
   children: React.ReactNode;
 }) {
   const navigation = useNavigation();
-  const [cartOpen, _setCartOpen] = useState(false);
-  const setCartOpen = useCallback((open: boolean) => {
-    startTransition(() => {
-      _setCartOpen(open);
-    });
-  }, []);
+  const [cartOpen, setCartOpen] = useState(false);
 
   useEffect(
     () =>
