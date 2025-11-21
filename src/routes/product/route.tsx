@@ -29,108 +29,117 @@ export default async function ProductRoute({
       <title>{`${product.title} | Remix Store`}</title>
       <meta name="description" content={product.description || product.title} />
 
-      <GridCol>
-        <Grid nested>
-          <GridRow className="grid-cols-1 lg:grid-cols-[3fr_2fr]">
-            {/* Product Images */}
-            <GridCol>
-              {product.images.nodes.map((image, index) => (
-                <div
-                  key={image.url as string}
-                  className="relative aspect-square overflow-hidden"
-                >
-                  {(() => {
-                    const Wrapper = index === 0 ? ViewTransition : Fragment;
-                    const props =
-                      Wrapper === ViewTransition
-                        ? {
-                            name: `product-image--${product.handle}`,
-                          }
-                        : {};
-                    return (
-                      <Wrapper {...props}>
-                        <img
-                          src={image.url as string}
-                          alt={
-                            image.altText ||
-                            `${product.title} - Image ${index + 1}`
-                          }
-                          className="h-full w-full object-cover"
-                          loading={index === 0 ? "eager" : "lazy"}
-                        />
-                      </Wrapper>
-                    );
-                  })()}
-                </div>
-              ))}
-            </GridCol>
-
-            {/* Product Details */}
-            <GridCol>
-              <ViewTransition name="product-details">
-                <div className="sticky top-0 paper border-y-2 -mt-0.5 -mb-0.5">
-                  <ViewTransition
-                    key={product.handle}
-                    name={`product-card--${product.handle}`}
+      <ViewTransition name={`product-card--${product.handle}`}>
+        <GridCol>
+          <Grid nested>
+            <GridRow className="grid-cols-1 lg:grid-cols-[3fr_2fr]">
+              {/* Product Images */}
+              <GridCol>
+                {product.images.nodes.map((image, index) => (
+                  <div
+                    key={image.url as string}
+                    className="relative aspect-square overflow-hidden"
                   >
-                    <div className="space-y-6 p-4 md:p-6 ">
-                      <div>
-                        <ViewTransition
-                          name={`product-title--${product.handle}`}
-                        >
-                          <h1 className="text-3xl font-bold tracking-tight">
-                            {product.title}
-                          </h1>
-                        </ViewTransition>
+                    {(() => {
+                      const Wrapper = index === 0 ? ViewTransition : Fragment;
+                      const props =
+                        Wrapper === ViewTransition
+                          ? {
+                              name: `product-image--${product.handle}`,
+                            }
+                          : {};
+                      return (
+                        <Wrapper {...props}>
+                          <img
+                            src={image.url as string}
+                            alt={
+                              image.altText ||
+                              `${product.title} - Image ${index + 1}`
+                            }
+                            className="h-full w-full object-cover"
+                            loading={index === 0 ? "eager" : "lazy"}
+                          />
+                        </Wrapper>
+                      );
+                    })()}
+                  </div>
+                ))}
+              </GridCol>
+
+              {/* Product Details */}
+              <GridCol>
+                <ViewTransition name="product-details">
+                  <div className="sticky top-0 paper border-y-2 -mt-0.5 -mb-0.5">
+                    <ViewTransition
+                      key={product.handle}
+                      name={`product-card-body--${product.handle}`}
+                    >
+                      <div className="space-y-6 p-4 md:p-6 ">
+                        <div>
+                          <ViewTransition
+                            name={`product-title--${product.handle}`}
+                          >
+                            <h1 className="text-3xl font-bold tracking-tight">
+                              {product.title}
+                            </h1>
+                          </ViewTransition>
+                        </div>
+
+                        {product.description && (
+                          <div className="prose text-text-dimmed max-w-none">
+                            <p>{product.description}</p>
+                          </div>
+                        )}
+
+                        <AddToCartForm
+                          action={addToCartAction}
+                          product={readFragment(
+                            productOptionsFragment,
+                            product,
+                          )}
+                          onAddToCart={setCartOpen}
+                        />
+
+                        {/* Product Meta */}
+                        {product.vendor && (
+                          <div className="text-sm text-text-dimmed-600">
+                            <p>
+                              <span className="font-medium">Vendor:</span>{" "}
+                              {product.vendor}
+                            </p>
+                          </div>
+                        )}
                       </div>
+                    </ViewTransition>
+                  </div>
+                </ViewTransition>
+              </GridCol>
+            </GridRow>
 
-                      {product.description && (
-                        <div className="prose text-text-dimmed max-w-none">
-                          <p>{product.description}</p>
-                        </div>
-                      )}
-
-                      <AddToCartForm
-                        action={addToCartAction}
-                        product={readFragment(productOptionsFragment, product)}
-                        onAddToCart={setCartOpen}
-                      />
-
-                      {/* Product Meta */}
-                      {product.vendor && (
-                        <div className="text-sm text-text-dimmed-600">
-                          <p>
-                            <span className="font-medium">Vendor:</span>{" "}
-                            {product.vendor}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </ViewTransition>
-                </div>
-              </ViewTransition>
-            </GridCol>
-          </GridRow>
-
-          <Suspense
-            fallback={
-              <GridRow>
-                <Grid nested>
-                  <GridRow className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
-                    {Array.from({ length: 8 }).map((_, index) => (
-                      <GridCol key={index}>
-                        <ProductCardFallback />
-                      </GridCol>
-                    ))}
+            <GridCol>
+              <Suspense
+                fallback={
+                  <GridRow>
+                    <Grid nested>
+                      <GridRow className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+                        {Array.from({ length: 8 }).map((_, index) => (
+                          <GridCol key={index}>
+                            <ProductCardFallback />
+                          </GridCol>
+                        ))}
+                      </GridRow>
+                    </Grid>
                   </GridRow>
-                </Grid>
-              </GridRow>
-            }
-          >
-            <RecommendedProducts productId={product.id} />
-          </Suspense>
-        </Grid>
-      </GridCol>
+                }
+              >
+                <ViewTransition name="recomendations">
+                  <RecommendedProducts productId={product.id} />
+                </ViewTransition>
+              </Suspense>
+            </GridCol>
+          </Grid>
+        </GridCol>
+      </ViewTransition>
     </>
   );
 }
@@ -147,10 +156,11 @@ async function RecommendedProducts({ productId }: { productId: string }) {
       <Grid nested>
         <GridRow className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
           {recommendedProducts.map((recommendedProduct) => (
-            <GridCol key={recommendedProduct.handle}>
-              <ViewTransition
-                name={`product-card--${recommendedProduct.handle}`}
-              >
+            <ViewTransition
+              key={recommendedProduct.handle}
+              name={`product-card--${recommendedProduct.handle}`}
+            >
+              <GridCol>
                 <ProductCard
                   to={`/p/${recommendedProduct.handle}`}
                   className="h-full p-4 -outline-offset-2"
@@ -190,8 +200,8 @@ async function RecommendedProducts({ productId }: { productId: string }) {
                     </ProductCardBody>
                   </ViewTransition>
                 </ProductCard>
-              </ViewTransition>
-            </GridCol>
+              </GridCol>
+            </ViewTransition>
           ))}
           <FillRow
             cols={[

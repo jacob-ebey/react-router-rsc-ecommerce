@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useRef, ViewTransition } from "react";
+import { useCallback, useDeferredValue, useRef, ViewTransition } from "react";
 import { incrementScrollLock } from "./scroll-lock";
 
 export function Sidebar({
   children,
-  open,
+  open: _open,
   onClose,
   ...props
 }: {
@@ -14,6 +14,7 @@ export function Sidebar({
   open: boolean;
   onClose: () => void;
 }) {
+  const open = useDeferredValue(_open);
   const lockedRef = useRef(false);
 
   const dialogRef = useCallback(
@@ -43,14 +44,14 @@ export function Sidebar({
 
           onClose();
         },
-        { signal: controller.signal }
+        { signal: controller.signal },
       );
 
       return () => {
         controller.abort();
       };
     },
-    [open]
+    [open],
   );
 
   return (

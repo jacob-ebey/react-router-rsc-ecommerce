@@ -13,7 +13,7 @@ export function DotMatrix({
         "dot-matrix relative block overflow-hidden",
         "after:absolute after:top-0 after:left-0 after:right-0 after:bottom-0",
         { "dot-matrix__reveal": reveal },
-        className
+        className,
       )}
       {...props}
     />

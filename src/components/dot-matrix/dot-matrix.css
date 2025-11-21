@@ -2,17 +2,13 @@
   --reveal-scaled: calc(max(0, (var(--reveal-percent) - 0.25) / 0.75));
 
   transition: filter var(--reveal-speed) linear;
-  filter: contrast(
-    calc(min(160%, max(100%, (160% * (1 - var(--reveal-scaled))) - 0.25)))
-  );
+  filter: contrast(calc(min(160%, max(100%, (160% * (1 - var(--reveal-scaled))) - 0.25))));
 
   &::after {
-    mix-blend-mode: hard-light;
-    background: radial-gradient(
-      circle at center,
-      var(--color-text),
-      var(--color-background)
-    );
+    mix-blend-mode: hard-light !important;
+    background: radial-gradient(circle at center,
+        var(--color-text),
+        var(--color-background));
     background-size: 0.25em 0.25em;
     transition: opacity var(--reveal-speed) linear;
     opacity: min(0.75, max(0, calc((1 - var(--reveal-scaled)) - 0.25)));

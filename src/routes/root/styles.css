@@ -31,14 +31,14 @@
 
 
 @layer base {
-  * {
-    @apply border-border outline-primary-blue;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     ::view-transition-group(*) {
       animation-duration: 0s !important;
     }
+  }
+
+  * {
+    @apply border-border outline-primary-blue;
   }
 
   html,
@@ -57,6 +57,7 @@
       animation: progress 3s infinite linear;
     }
   }
+
 
   .left-right {
     transform-origin: 0% 50%;

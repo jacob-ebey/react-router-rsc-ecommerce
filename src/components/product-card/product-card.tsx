@@ -138,18 +138,18 @@ export function ProductCardImages({
 
   if (images.length === 1) {
     return (
-      <DotMatrix>
-        <picture className="block w-full aspect-square relative">
-          <Wrapper {...props}>
+      <Wrapper {...props}>
+        <DotMatrix>
+          <picture className="block w-full aspect-square relative">
             <img
               className="absolute inset-0 object-cover"
               alt=""
               src={images[0]}
               loading={loading}
             />
-          </Wrapper>
-        </picture>
-      </DotMatrix>
+          </picture>
+        </DotMatrix>
+      </Wrapper>
     );
   }
 
@@ -158,28 +158,20 @@ export function ProductCardImages({
       <div className="crossfade-container-trigger" />
       <div className="crossfade-container">
         <DotMatrix>
-          {images.map((image, index) => {
-            let Wrap: any = Fragment;
-            let props: any = {};
-            if (index === 0 && viewTransitionName) {
-              Wrap = ViewTransition;
-              props = {
-                name: viewTransitionName,
-              };
-            }
-            return (
-              <picture key={`${index}|${image}`}>
-                <Wrap {...props}>
+          <Wrapper {...props}>
+            {images.map((image, index) => {
+              return (
+                <picture key={`${index}|${image}`}>
                   <img
                     className="object-cover w-full aspect-square"
                     alt=""
                     src={image}
                     loading={index === 0 ? loading : "lazy"}
                   />
-                </Wrap>
-              </picture>
-            );
-          })}
+                </picture>
+              );
+            })}
+          </Wrapper>
         </DotMatrix>
       </div>
     </>
