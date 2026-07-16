@@ -17,6 +17,10 @@ const dirname =
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url));
 
+if (process.env.NODE_ENV === "development") {
+  process.loadEnvFile();
+}
+
 export default defineConfig({
   environments: {
     client: {

@@ -8,7 +8,7 @@ import { decodeError, StatusCodeError } from "./lib/errors";
 
 export async function generateHTML(
   request: Request,
-  fetchServer: (request: Request) => Promise<Response>
+  serverResponse: Response,
 ): Promise<Response> {
   let headers: Headers | undefined;
   let overrideStatus: number | undefined;
@@ -17,14 +17,15 @@ export async function generateHTML(
     // The incoming request.
     request,
     // How to call the React Server.
-    fetchServer,
+    // fetchServer,
+    serverResponse,
     // Provide the React Server touchpoints.
     createFromReadableStream,
     // Render the router to HTML.
     async renderHTML(getPayload) {
       const payload = await getPayload();
       const formState =
-        payload.type === "render" ? await payload.formState : undefined;
+        payload.type === "render" ? payload.formState : undefined;
 
       const bootstrapScriptContent =
         await import.meta.viteRsc.loadBootstrapScriptContent("index");
@@ -33,7 +34,6 @@ export async function generateHTML(
         <RSCStaticRouter getPayload={getPayload} />,
         {
           bootstrapScriptContent,
-          // @ts-expect-error - no types for this yet
           formState,
           signal: request.signal,
           onHeaders(_headers) {
@@ -53,7 +53,7 @@ export async function generateHTML(
               console.error(error);
             }
           },
-        }
+        },
       );
     },
   });

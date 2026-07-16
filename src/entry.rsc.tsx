@@ -25,7 +25,7 @@ export function fetchServer(request: Request) {
         driver: createFsDriver({
           base: "./node_modules/.cache/rsc",
         }),
-      })
+      }),
     ),
     () =>
       provideSession(request, () => {
@@ -55,18 +55,18 @@ export function fetchServer(request: Request) {
               {
                 status: match.statusCode,
                 headers: match.headers,
-              }
+              },
             );
           },
         }).then((response) => [response, response.clone()]);
 
         waitUntilPromise = responsesPromise.then(([, clone]) =>
-          clone.body?.pipeTo(new WritableStream())
+          clone.body?.pipeTo(new WritableStream()),
         );
 
         return responsesPromise.then(([response]) => response);
       }),
-    () => waitUntilPromise
+    () => waitUntilPromise,
   );
 }
 
@@ -77,7 +77,7 @@ export default {
       typeof import("./entry.ssr")
     >("ssr", "index");
 
-    return ssr.generateHTML(request, fetchServer);
+    return ssr.generateHTML(request, await fetchServer(request));
   },
 };
 
